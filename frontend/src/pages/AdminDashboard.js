@@ -201,7 +201,7 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="bookings" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto mb-8 bg-white border border-[#E8D7C3] rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-4 max-w-3xl mx-auto mb-8 bg-white border border-[#E8D7C3] rounded-xl p-1">
             <TabsTrigger value="bookings" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-bookings">
               <Calendar className="w-4 h-4 mr-2" />
               Agendamentos
@@ -213,6 +213,10 @@ const AdminDashboard = () => {
             <TabsTrigger value="hours" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-hours">
               <Clock className="w-4 h-4 mr-2" />
               Horários
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-settings">
+              <Settings className="w-4 h-4 mr-2" />
+              Configurações
             </TabsTrigger>
           </TabsList>
 
