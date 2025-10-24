@@ -333,6 +333,36 @@ async def update_business_hours(day_of_week: int, hours_update: BusinessHoursUpd
     
     return {"message": "Business hours updated"}
 
+# Settings routes
+@api_router.get("/settings")
+async def get_settings():
+    settings = await db.settings.find_one({}, {"_id": 0})
+    if not settings:
+        # Return default if not found
+        return {"whatsapp_number": "+5588998376642"}
+    return settings
+
+@api_router.put("/settings")
+async def update_settings(settings_update: SettingsUpdate, admin: str = Depends(get_current_admin)):
+    settings = await db.settings.find_one({})
+    if settings:
+        await db.settings.update_one(
+            {"id": settings["id"]},
+            {"$set": {
+                "whatsapp_number": settings_update.whatsapp_number,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    else:
+        new_settings = {
+            "id": str(uuid.uuid4()),
+            "whatsapp_number": settings_update.whatsapp_number,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.settings.insert_one(new_settings)
+    
+    return {"message": "Settings updated"}
+
 # Image upload
 @api_router.post("/upload-image")
 async def upload_image(file: UploadFile = File(...), admin: str = Depends(get_current_admin)):
