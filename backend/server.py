@@ -247,7 +247,7 @@ async def get_bookings(admin: str = Depends(get_current_admin)):
     bookings = await db.bookings.find({}, {"_id": 0}).sort("date", -1).to_list(1000)
     return bookings
 
-@api_router.post("/bookings", response_model=Booking)
+@api_router.post("/bookings", response_model=BookingResponse)
 async def create_booking(booking: BookingCreate):
     # Validate service exists
     service = await db.services.find_one({"id": booking.service_id, "active": True})
@@ -274,7 +274,7 @@ async def create_booking(booking: BookingCreate):
     settings = await db.settings.find_one({}, {"_id": 0})
     whatsapp_number = settings["whatsapp_number"] if settings else "+5588998376642"
     
-    return {**booking_obj.model_dump(), "whatsapp_number": whatsapp_number}
+    return BookingResponse(**booking_obj.model_dump(), whatsapp_number=whatsapp_number)
 
 @api_router.get("/bookings/available-slots")
 async def get_available_slots(date: str):
