@@ -68,6 +68,19 @@ class Booking(BaseModel):
     status: str = "pending"  # pending, confirmed, cancelled
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+class BookingResponse(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    customer_name: str
+    phone: str
+    service_id: str
+    service_name: str
+    date: str
+    time: str
+    status: str
+    created_at: str
+    whatsapp_number: str
+
 class BookingCreate(BaseModel):
     customer_name: str
     phone: str
