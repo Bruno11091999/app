@@ -115,6 +115,13 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_#E8D7C3_0%,_transparent_50%)]" />
         <div className="container mx-auto px-4 py-20 relative">
           <div className="max-w-4xl mx-auto text-center">
+            <div className="flex justify-center mb-8">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_eyelash-studio-5/artifacts/i7jun2yn_Marca%20d%20agua-06.png" 
+                alt="Vitoria Lavor Beauty Logo" 
+                className="w-48 h-48 object-contain"
+              />
+            </div>
             <div className="inline-flex items-center justify-center mb-6">
               <Sparkles className="w-6 h-6 text-[#D4AF37] mr-2" />
               <span className="text-[#D4AF37] font-medium tracking-wider uppercase text-sm">Beauty & Elegance</span>
