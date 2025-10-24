@@ -75,7 +75,7 @@ const HomePage = () => {
 
     setLoading(true);
     try {
-      await axios.post(`${API}/bookings`, {
+      const response = await axios.post(`${API}/bookings`, {
         customer_name: formData.customer_name,
         phone: formData.phone,
         service_id: formData.service_id,
@@ -84,6 +84,24 @@ const HomePage = () => {
       });
       
       toast.success('Agendamento realizado com sucesso! Entraremos em contato em breve.');
+      
+      // Send WhatsApp notification
+      const booking = response.data;
+      const service = services.find(s => s.id === formData.service_id);
+      const whatsappNumber = booking.whatsapp_number || '+5588998376642';
+      const message = encodeURIComponent(
+        `🎉 *Novo Agendamento!*\n\n` +
+        `👤 Cliente: ${formData.customer_name}\n` +
+        `📱 Telefone: ${formData.phone}\n` +
+        `💅 Serviço: ${service?.name}\n` +
+        `📅 Data: ${format(formData.date, 'dd/MM/yyyy')}\n` +
+        `🕐 Horário: ${formData.time}\n\n` +
+        `Vitoria Lavor Beauty`
+      );
+      
+      // Open WhatsApp in new tab
+      window.open(`https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${message}`, '_blank');
+      
       setFormData({
         customer_name: '',
         phone: '',
