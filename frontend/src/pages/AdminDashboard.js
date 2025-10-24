@@ -501,6 +501,54 @@ const AdminDashboard = () => {
               </div>
             </div>
           </TabsContent>
+
+          <TabsContent value="settings" data-testid="settings-content">
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-[#E8D7C3]">
+              <h2 className="font-display text-3xl font-bold text-[#2D2D2D] mb-6">Configurações</h2>
+              
+              <div className="max-w-2xl">
+                <div className="bg-[#FAF8F5] rounded-2xl p-6 border border-[#E8D7C3]">
+                  <h3 className="font-semibold text-xl text-[#2D2D2D] mb-4 flex items-center">
+                    <Phone className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                    Notificações via WhatsApp
+                  </h3>
+                  <p className="text-[#6B6B6B] mb-4 text-sm">
+                    Configure o número do WhatsApp que receberá notificações automáticas quando um novo agendamento for realizado.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-[#2D2D2D] mb-2 block">Número do WhatsApp (com código do país)</Label>
+                      <Input
+                        value={settings.whatsapp_number}
+                        onChange={(e) => setSettings({...settings, whatsapp_number: e.target.value})}
+                        placeholder="+5588998376642"
+                        className="border-[#E8D7C3] focus:border-[#D4AF37] focus:ring-[#D4AF37] rounded-xl"
+                        data-testid="whatsapp-number-input"
+                      />
+                      <p className="text-xs text-[#6B6B6B] mt-2">
+                        Exemplo: +55 88 99837-6642 (use apenas números com código do país)
+                      </p>
+                    </div>
+                    
+                    <Button 
+                      onClick={updateSettings}
+                      className="w-full bg-[#D4AF37] hover:bg-[#B8941F] text-white py-6 text-lg rounded-xl transition-all duration-300"
+                      data-testid="save-settings-btn"
+                    >
+                      Salvar Configurações
+                    </Button>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <p className="text-sm text-green-800">
+                      <strong>Como funciona:</strong> Quando um cliente fizer um agendamento, uma mensagem será automaticamente aberta no WhatsApp com os detalhes do agendamento para este número.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
