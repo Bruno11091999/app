@@ -256,7 +256,12 @@ async def create_booking(booking: BookingCreate):
     )
     doc = booking_obj.model_dump()
     await db.bookings.insert_one(doc)
-    return booking_obj
+    
+    # Get WhatsApp settings and return with booking
+    settings = await db.settings.find_one({}, {"_id": 0})
+    whatsapp_number = settings["whatsapp_number"] if settings else "+5588998376642"
+    
+    return {**booking_obj.model_dump(), "whatsapp_number": whatsapp_number}
 
 @api_router.get("/bookings/available-slots")
 async def get_available_slots(date: str):
