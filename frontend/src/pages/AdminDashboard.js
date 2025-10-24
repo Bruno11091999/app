@@ -161,6 +161,15 @@ const AdminDashboard = () => {
     }
   };
 
+  const updateSettings = async () => {
+    try {
+      await axios.put(`${API}/settings`, { whatsapp_number: settings.whatsapp_number }, getAuthHeaders());
+      toast.success('Configurações atualizadas!');
+    } catch (error) {
+      toast.error('Erro ao atualizar configurações');
+    }
+  };
+
   const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
