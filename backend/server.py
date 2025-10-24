@@ -97,6 +97,15 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+class Settings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    whatsapp_number: str
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class SettingsUpdate(BaseModel):
+    whatsapp_number: str
+
 # Helper functions
 def create_access_token(data: dict):
     to_encode = data.copy()
