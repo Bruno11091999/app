@@ -172,6 +172,17 @@ async def startup_event():
         ]
         await db.services.insert_many(default_services)
         logger.info("Default services created")
+    
+    # Create default settings
+    settings_count = await db.settings.count_documents({})
+    if settings_count == 0:
+        default_settings = {
+            "id": str(uuid.uuid4()),
+            "whatsapp_number": "+5588998376642",
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.settings.insert_one(default_settings)
+        logger.info("Default settings created")
 
 # Auth routes
 @api_router.post("/auth/login", response_model=Token)
