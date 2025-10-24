@@ -17,6 +17,7 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [services, setServices] = useState([]);
   const [businessHours, setBusinessHours] = useState([]);
+  const [settings, setSettings] = useState({ whatsapp_number: '' });
   const [editingService, setEditingService] = useState(null);
   const [newService, setNewService] = useState({ name: '', description: '', price: '' });
   const [uploadingImage, setUploadingImage] = useState(false);
