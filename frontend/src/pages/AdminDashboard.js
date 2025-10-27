@@ -276,6 +276,135 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="reports" data-testid="reports-content">
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-[#E8D7C3]">
+              <h2 className="font-display text-3xl font-bold text-[#2D2D2D] mb-6">Relatório Financeiro</h2>
+              
+              {/* Summary Cards */}
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                {/* Weekly Revenue */}
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-green-900">Semanal</h3>
+                    <div className="bg-green-500 p-3 rounded-xl">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-bold text-green-900 mb-2">
+                    R$ {revenueData.weekly.total.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-green-700">
+                    {revenueData.weekly.count} agendamentos confirmados
+                  </p>
+                  <p className="text-xs text-green-600 mt-2">Últimos 7 dias</p>
+                </div>
+
+                {/* Monthly Revenue */}
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-blue-900">Mensal</h3>
+                    <div className="bg-blue-500 p-3 rounded-xl">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-bold text-blue-900 mb-2">
+                    R$ {revenueData.monthly.total.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-blue-700">
+                    {revenueData.monthly.count} agendamentos confirmados
+                  </p>
+                  <p className="text-xs text-blue-600 mt-2">Últimos 30 dias</p>
+                </div>
+
+                {/* Annual Revenue */}
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border-2 border-purple-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-purple-900">Anual</h3>
+                    <div className="bg-purple-500 p-3 rounded-xl">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-bold text-purple-900 mb-2">
+                    R$ {revenueData.annual.total.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-purple-700">
+                    {revenueData.annual.count} agendamentos confirmados
+                  </p>
+                  <p className="text-xs text-purple-600 mt-2">Últimos 365 dias</p>
+                </div>
+              </div>
+
+              {/* Detailed Monthly Bookings */}
+              <div className="bg-[#FAF8F5] rounded-2xl p-6 border border-[#E8D7C3]">
+                <h3 className="font-semibold text-xl text-[#2D2D2D] mb-4">Agendamentos Confirmados (Últimos 30 dias)</h3>
+                {revenueData.monthly.bookings && revenueData.monthly.bookings.length > 0 ? (
+                  <div className="space-y-3">
+                    {revenueData.monthly.bookings.slice(0, 10).map((booking) => (
+                      <div key={booking.id} className="bg-white rounded-xl p-4 border border-[#E8D7C3] flex justify-between items-center">
+                        <div className="flex-1">
+                          <p className="font-semibold text-[#2D2D2D]">{booking.customer_name}</p>
+                          <p className="text-sm text-[#6B6B6B]">{booking.service_name}</p>
+                          <p className="text-xs text-[#6B6B6B]">{booking.date} às {booking.time}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-[#D4AF37]">R$ {booking.price.toFixed(2)}</p>
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Confirmado</span>
+                        </div>
+                      </div>
+                    ))}
+                    {revenueData.monthly.bookings.length > 10 && (
+                      <p className="text-center text-[#6B6B6B] text-sm pt-2">
+                        E mais {revenueData.monthly.bookings.length - 10} agendamentos...
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-center text-[#6B6B6B] py-8">Nenhum agendamento confirmado nos últimos 30 dias</p>
+                )}
+              </div>
+
+              {/* Statistics */}
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <div className="bg-[#FAF8F5] rounded-2xl p-6 border border-[#E8D7C3]">
+                  <h3 className="font-semibold text-lg text-[#2D2D2D] mb-3">Média de Faturamento</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-[#6B6B6B]">Por agendamento (mensal):</span>
+                      <span className="font-semibold text-[#D4AF37]">
+                        R$ {revenueData.monthly.count > 0 ? (revenueData.monthly.total / revenueData.monthly.count).toFixed(2) : '0.00'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#6B6B6B]">Por dia (últimos 30 dias):</span>
+                      <span className="font-semibold text-[#D4AF37]">
+                        R$ {(revenueData.monthly.total / 30).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#FAF8F5] rounded-2xl p-6 border border-[#E8D7C3]">
+                  <h3 className="font-semibold text-lg text-[#2D2D2D] mb-3">Projeções</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-[#6B6B6B]">Projeção mensal:</span>
+                      <span className="font-semibold text-green-600">
+                        R$ {((revenueData.weekly.total / 7) * 30).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#6B6B6B]">Projeção anual:</span>
+                      <span className="font-semibold text-green-600">
+                        R$ {((revenueData.weekly.total / 7) * 365).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#6B6B6B] mt-3">*Baseado na média semanal atual</p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
           <TabsContent value="services" data-testid="services-content">
             <div className="bg-white rounded-3xl shadow-lg p-8 border border-[#E8D7C3]">
               <h2 className="font-display text-3xl font-bold text-[#2D2D2D] mb-6">Gerenciar Serviços</h2>
