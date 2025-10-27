@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Calendar, Clock, LogOut, Settings, Sparkles, Upload, Edit, Trash2, Check, X, Phone } from 'lucide-react';
+import { Calendar, Clock, LogOut, Settings, Sparkles, Upload, Edit, Trash2, Check, X, Phone, TrendingUp, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
