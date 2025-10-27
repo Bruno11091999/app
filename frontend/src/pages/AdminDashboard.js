@@ -39,16 +39,18 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [bookingsRes, servicesRes, hoursRes, settingsRes] = await Promise.all([
+      const [bookingsRes, servicesRes, hoursRes, settingsRes, revenueRes] = await Promise.all([
         axios.get(`${API}/bookings`, getAuthHeaders()),
         axios.get(`${API}/services?active_only=false`, getAuthHeaders()),
         axios.get(`${API}/business-hours`, getAuthHeaders()),
-        axios.get(`${API}/settings`)
+        axios.get(`${API}/settings`),
+        axios.get(`${API}/reports/revenue`, getAuthHeaders())
       ]);
       setBookings(bookingsRes.data);
       setServices(servicesRes.data);
       setBusinessHours(hoursRes.data);
       setSettings(settingsRes.data);
+      setRevenueData(revenueRes.data);
     } catch (error) {
       if (error.response?.status === 401) {
         localStorage.removeItem('admin_token');
