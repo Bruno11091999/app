@@ -204,10 +204,14 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="bookings" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 max-w-3xl mx-auto mb-8 bg-white border border-[#E8D7C3] rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-5 max-w-4xl mx-auto mb-8 bg-white border border-[#E8D7C3] rounded-xl p-1">
             <TabsTrigger value="bookings" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-bookings">
               <Calendar className="w-4 h-4 mr-2" />
               Agendamentos
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-reports">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              Relatórios
             </TabsTrigger>
             <TabsTrigger value="services" className="rounded-lg data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white" data-testid="tab-services">
               <Sparkles className="w-4 h-4 mr-2" />
