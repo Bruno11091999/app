@@ -376,6 +376,64 @@ async def update_settings(settings_update: SettingsUpdate, admin: str = Depends(
     
     return {"message": "Settings updated"}
 
+# Financial Reports
+@api_router.get("/reports/revenue")
+async def get_revenue_report(admin: str = Depends(get_current_admin)):
+    # Get all confirmed bookings
+    confirmed_bookings = await db.bookings.find({"status": "confirmed"}, {"_id": 0}).to_list(10000)
+    
+    # Get all services for price lookup
+    services = await db.services.find({}, {"_id": 0}).to_list(1000)
+    service_prices = {s["id"]: s["price"] for s in services}
+    
+    now = datetime.now(timezone.utc)
+    
+    # Calculate revenue by period
+    weekly_revenue = 0
+    monthly_revenue = 0
+    annual_revenue = 0
+    
+    weekly_bookings = []
+    monthly_bookings = []
+    annual_bookings = []
+    
+    for booking in confirmed_bookings:
+        booking_date = datetime.fromisoformat(booking["created_at"].replace('Z', '+00:00'))
+        price = service_prices.get(booking["service_id"], 0)
+        
+        # Weekly (last 7 days)
+        if (now - booking_date).days <= 7:
+            weekly_revenue += price
+            weekly_bookings.append({**booking, "price": price})
+        
+        # Monthly (last 30 days)
+        if (now - booking_date).days <= 30:
+            monthly_revenue += price
+            monthly_bookings.append({**booking, "price": price})
+        
+        # Annual (last 365 days)
+        if (now - booking_date).days <= 365:
+            annual_revenue += price
+            annual_bookings.append({**booking, "price": price})
+    
+    return {
+        "weekly": {
+            "total": weekly_revenue,
+            "count": len(weekly_bookings),
+            "bookings": weekly_bookings
+        },
+        "monthly": {
+            "total": monthly_revenue,
+            "count": len(monthly_bookings),
+            "bookings": monthly_bookings
+        },
+        "annual": {
+            "total": annual_revenue,
+            "count": len(annual_bookings),
+            "bookings": annual_bookings
+        }
+    }
+
 # Image upload
 @api_router.post("/upload-image")
 async def upload_image(file: UploadFile = File(...), admin: str = Depends(get_current_admin)):
