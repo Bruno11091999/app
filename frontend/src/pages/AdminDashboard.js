@@ -278,7 +278,17 @@ const AdminDashboard = () => {
 
           <TabsContent value="reports" data-testid="reports-content">
             <div className="bg-white rounded-3xl shadow-lg p-8 border border-[#E8D7C3]">
-              <h2 className="font-display text-3xl font-bold text-[#2D2D2D] mb-6">Relatório Financeiro</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-display text-3xl font-bold text-[#2D2D2D]">Relatório Financeiro</h2>
+                <Button 
+                  onClick={fetchData}
+                  className="bg-[#D4AF37] hover:bg-[#B8941F] text-white rounded-xl"
+                  data-testid="refresh-reports-btn"
+                >
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Atualizar
+                </Button>
+              </div>
               
               {/* Summary Cards */}
               <div className="grid md:grid-cols-3 gap-6 mb-8">
