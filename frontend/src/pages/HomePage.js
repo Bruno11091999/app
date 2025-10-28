@@ -193,8 +193,12 @@ const HomePage = () => {
                 <div className="p-6">
                   <h3 className="font-display text-2xl font-semibold text-[#2D2D2D] mb-3">{service.name}</h3>
                   <p className="text-[#6B6B6B] mb-4 leading-relaxed">{service.description}</p>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-3xl font-bold text-[#D4AF37]">R$ {service.price.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-[#6B6B6B]">
+                    <Clock className="w-4 h-4 mr-1" />
+                    <span>{service.duration || 60} minutos</span>
                   </div>
                 </div>
               </div>
