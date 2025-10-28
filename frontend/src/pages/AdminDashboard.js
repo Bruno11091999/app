@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   const [settings, setSettings] = useState({ whatsapp_number: '' });
   const [revenueData, setRevenueData] = useState({ weekly: { total: 0, count: 0 }, monthly: { total: 0, count: 0 }, annual: { total: 0, count: 0 } });
   const [editingService, setEditingService] = useState(null);
-  const [newService, setNewService] = useState({ name: '', description: '', price: '' });
+  const [newService, setNewService] = useState({ name: '', description: '', price: '', duration: 60 });
   const [uploadingImage, setUploadingImage] = useState(false);
   const navigate = useNavigate();
 
