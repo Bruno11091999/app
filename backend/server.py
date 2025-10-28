@@ -39,6 +39,7 @@ class Service(BaseModel):
     name: str
     description: str
     price: float
+    duration: int = 60  # duration in minutes
     image_url: Optional[str] = None
     active: bool = True
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -47,12 +48,14 @@ class ServiceCreate(BaseModel):
     name: str
     description: str
     price: float
+    duration: int = 60
     image_url: Optional[str] = None
 
 class ServiceUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
+    duration: Optional[int] = None
     image_url: Optional[str] = None
     active: Optional[bool] = None
 
