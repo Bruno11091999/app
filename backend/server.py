@@ -320,7 +320,7 @@ async def create_booking(booking: BookingCreate):
     return BookingResponse(**booking_obj.model_dump(), whatsapp_number=whatsapp_number)
 
 @api_router.get("/bookings/available-slots")
-async def get_available_slots(date: str):
+async def get_available_slots(date: str, service_id: str = None):
     # Parse date to get day of week
     date_obj = datetime.strptime(date, "%Y-%m-%d")
     day_of_week = date_obj.weekday()
@@ -330,25 +330,51 @@ async def get_available_slots(date: str):
     if not business_hours or not business_hours["is_open"]:
         return {"available_slots": []}
     
-    # Generate time slots
+    # Generate time slots with 30-minute intervals
     open_time = datetime.strptime(business_hours["open_time"], "%H:%M")
     close_time = datetime.strptime(business_hours["close_time"], "%H:%M")
-    interval = business_hours["interval_minutes"]
     
     slots = []
     current = open_time
     while current < close_time:
         slots.append(current.strftime("%H:%M"))
-        current += timedelta(minutes=interval)
+        current += timedelta(minutes=30)
     
     # Get booked slots
     booked = await db.bookings.find({
         "date": date,
-        "status": {"$ne": "cancelled"}
+        "status": {"$in": ["pending", "confirmed", "blocked"]}
     }, {"_id": 0, "time": 1}).to_list(1000)
     booked_times = [b["time"] for b in booked]
     
-    # Filter available slots
+    # If service_id is provided, check if there's enough consecutive time
+    if service_id:
+        service = await db.services.find_one({"id": service_id, "active": True})
+        if service:
+            duration = service.get("duration", 60)
+            slots_needed = duration // 30
+            
+            available = []
+            for i, slot in enumerate(slots):
+                # Check if this slot and the next required slots are available
+                consecutive_available = True
+                for j in range(slots_needed):
+                    if i + j >= len(slots) or slots[i + j] in booked_times:
+                        consecutive_available = False
+                        break
+                
+                # Also check if the service would end after closing time
+                slot_time = datetime.strptime(slot, "%H:%M")
+                end_time = slot_time + timedelta(minutes=duration)
+                if end_time > close_time:
+                    consecutive_available = False
+                
+                if consecutive_available:
+                    available.append(slot)
+            
+            return {"available_slots": available}
+    
+    # If no service_id, just return slots that aren't booked
     available = [slot for slot in slots if slot not in booked_times]
     
     return {"available_slots": available}
