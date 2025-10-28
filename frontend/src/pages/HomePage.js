@@ -58,7 +58,10 @@ const HomePage = () => {
 
   const fetchAvailableSlots = async (date) => {
     try {
-      const response = await axios.get(`${API}/bookings/available-slots?date=${date}`);
+      const url = formData.service_id 
+        ? `${API}/bookings/available-slots?date=${date}&service_id=${formData.service_id}`
+        : `${API}/bookings/available-slots?date=${date}`;
+      const response = await axios.get(url);
       setAvailableSlots(response.data.available_slots);
     } catch (error) {
       console.error('Error fetching slots:', error);
