@@ -510,6 +510,10 @@ const AdminDashboard = () => {
                         <h3 className="font-semibold text-xl text-[#2D2D2D]">{service.name}</h3>
                         <p className="text-[#6B6B6B] mt-1">{service.description}</p>
                         <p className="text-[#D4AF37] font-bold text-lg mt-2">R$ {service.price.toFixed(2)}</p>
+                        <p className="text-[#6B6B6B] text-sm mt-1">
+                          <Clock className="inline w-3 h-3 mr-1" />
+                          {service.duration || 60} minutos
+                        </p>
                         <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs ${service.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                           {service.active ? 'Ativo' : 'Inativo'}
                         </span>
