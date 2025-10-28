@@ -180,14 +180,20 @@ async def startup_event():
     services_count = await db.services.count_documents({})
     if services_count == 0:
         default_services = [
-            {"id": str(uuid.uuid4()), "name": "Volume Brasileiro", "description": "Técnica brasileira de alongamento de cílios", "price": 150.0, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
-            {"id": str(uuid.uuid4()), "name": "Volume 5D", "description": "Alongamento 5D para volume intenso", "price": 180.0, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
-            {"id": str(uuid.uuid4()), "name": "Cat Eye", "description": "Efeito olho de gato elegante", "price": 160.0, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
-            {"id": str(uuid.uuid4()), "name": "Fox Eye", "description": "Efeito olho de raposa moderno", "price": 170.0, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
-            {"id": str(uuid.uuid4()), "name": "Capping", "description": "Técnica de finalização perfeita", "price": 140.0, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "name": "Volume Brasileiro", "description": "Técnica brasileira de alongamento de cílios", "price": 150.0, "duration": 120, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "name": "Volume 5D", "description": "Alongamento 5D para volume intenso", "price": 180.0, "duration": 150, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "name": "Cat Eye", "description": "Efeito olho de gato elegante", "price": 160.0, "duration": 90, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "name": "Fox Eye", "description": "Efeito olho de raposa moderno", "price": 170.0, "duration": 90, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "name": "Capping", "description": "Técnica de finalização perfeita", "price": 140.0, "duration": 60, "active": True, "image_url": None, "created_at": datetime.now(timezone.utc).isoformat()},
         ]
         await db.services.insert_many(default_services)
         logger.info("Default services created")
+    
+    # Update existing services to add duration field if missing
+    await db.services.update_many(
+        {"duration": {"$exists": False}},
+        {"$set": {"duration": 60}}
+    )
     
     # Create default settings
     settings_count = await db.settings.count_documents({})
