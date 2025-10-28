@@ -120,7 +120,7 @@ const AdminDashboard = () => {
         price: parseFloat(newService.price)
       }, getAuthHeaders());
       toast.success('Serviço criado!');
-      setNewService({ name: '', description: '', price: '', image_url: null });
+      setNewService({ name: '', description: '', price: '', duration: 60, image_url: null });
       fetchData();
     } catch (error) {
       toast.error('Erro ao criar serviço');
