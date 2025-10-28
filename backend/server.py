@@ -263,21 +263,55 @@ async def create_booking(booking: BookingCreate):
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
     
-    # Check if slot is available
-    existing = await db.bookings.find_one({
-        "date": booking.date,
-        "time": booking.time,
-        "status": {"$ne": "cancelled"}
-    })
-    if existing:
-        raise HTTPException(status_code=400, detail="This time slot is already booked")
+    # Get service duration
+    duration = service.get("duration", 60)
     
+    # Calculate all time slots needed for this booking
+    start_time = datetime.strptime(booking.time, "%H:%M")
+    slots_needed = []
+    current_time = start_time
+    
+    # Generate all 30-minute slots needed
+    while (current_time - start_time).total_seconds() < duration * 60:
+        slots_needed.append(current_time.strftime("%H:%M"))
+        current_time += timedelta(minutes=30)
+    
+    # Check if all required slots are available
+    for slot in slots_needed:
+        existing = await db.bookings.find_one({
+            "date": booking.date,
+            "time": slot,
+            "status": {"$ne": "cancelled"}
+        })
+        if existing:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Horário indisponível. O serviço necessita de {duration} minutos e o horário {slot} já está ocupado."
+            )
+    
+    # Create booking for the start time
     booking_obj = Booking(
         **booking.model_dump(),
         service_name=service["name"]
     )
     doc = booking_obj.model_dump()
     await db.bookings.insert_one(doc)
+    
+    # Create placeholder bookings for additional slots
+    for slot in slots_needed[1:]:
+        placeholder_booking = {
+            "id": str(uuid.uuid4()),
+            "customer_name": booking.customer_name,
+            "phone": booking.phone,
+            "service_id": booking.service_id,
+            "service_name": service["name"],
+            "date": booking.date,
+            "time": slot,
+            "status": "blocked",  # Special status for continuation slots
+            "parent_booking_id": booking_obj.id,  # Reference to main booking
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.bookings.insert_one(placeholder_booking)
     
     # Get WhatsApp settings and return with booking
     settings = await db.settings.find_one({}, {"_id": 0})
