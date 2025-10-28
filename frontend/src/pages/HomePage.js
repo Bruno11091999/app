@@ -259,7 +259,9 @@ const HomePage = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {services.map((service) => (
-                        <SelectItem key={service.id} value={service.id}>{service.name} - R$ {service.price.toFixed(2)}</SelectItem>
+                        <SelectItem key={service.id} value={service.id}>
+                          {service.name} - R$ {service.price.toFixed(2)} ({service.duration || 60} min)
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
