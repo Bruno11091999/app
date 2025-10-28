@@ -455,6 +455,20 @@ const AdminDashboard = () => {
                       data-testid="new-service-description"
                     />
                   </div>
+                  <div>
+                    <Label className="text-[#2D2D2D] mb-2 block">Duração (minutos)</Label>
+                    <Input
+                      type="number"
+                      step="30"
+                      min="30"
+                      value={newService.duration}
+                      onChange={(e) => setNewService({...newService, duration: parseInt(e.target.value)})}
+                      placeholder="60"
+                      className="border-[#E8D7C3] rounded-xl"
+                      data-testid="new-service-duration"
+                    />
+                    <p className="text-xs text-[#6B6B6B] mt-1">Duração em intervalos de 30 minutos</p>
+                  </div>
                   <div className="md:col-span-2">
                     <Label className="text-[#2D2D2D] mb-2 block">Imagem</Label>
                     <Input
