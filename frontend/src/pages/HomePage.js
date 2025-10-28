@@ -33,10 +33,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (formData.date) {
+    if (formData.date && formData.service_id) {
       fetchAvailableSlots(format(formData.date, 'yyyy-MM-dd'));
     }
-  }, [formData.date]);
+  }, [formData.date, formData.service_id]);
 
   const fetchServices = async () => {
     try {
