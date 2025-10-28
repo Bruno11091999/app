@@ -391,6 +391,13 @@ async def update_booking_status(booking_id: str, status: str, admin: str = Depen
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Booking not found")
     
+    # If cancelled, also cancel all blocked slots related to this booking
+    if status == "cancelled":
+        await db.bookings.update_many(
+            {"parent_booking_id": booking_id},
+            {"$set": {"status": "cancelled"}}
+        )
+    
     return {"message": "Status updated"}
 
 # Business hours routes
